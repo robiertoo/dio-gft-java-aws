@@ -23,7 +23,7 @@ public class JediController {
 	public ModelAndView jedi() {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("jedi");
-		mv.addObject("allJedi", repository.getAll());
+		mv.addObject("allJedi", repository.findAll());
 		return mv;
 	}
 	
@@ -40,7 +40,7 @@ public class JediController {
 	public String newJedi(@Valid @ModelAttribute Jedi jedi, BindingResult result, RedirectAttributes redirect) {
 		if(result.hasErrors()) return "new-jedi";
 		
-		repository.add(jedi);
+		repository.save(jedi);
 		redirect.addFlashAttribute("message", "Jedi successfully created!");
 		
 		return "redirect:jedi";
