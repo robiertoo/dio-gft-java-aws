@@ -17,56 +17,42 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.globallabs.springwebmvc.model.Jedi;
-import br.com.globallabs.springwebmvc.repository.JediRepository;
+import br.com.globallabs.springwebmvc.rest.service.JediService;
 
 @RestController
 @RequestMapping("/api")
 public class JediResource {
+
 	@Autowired
-	private JediRepository repository;
-	
+	private JediService service;
+
 	@GetMapping("/jedi")
 	public Iterable<Jedi> getAllJedi() {
-		return repository.findAll();
+		return service.findAll();
 	}
-	
+
 	@GetMapping("/jedi/{id}")
 	public ResponseEntity<Jedi> getJedi(@PathVariable int id) {
-		Optional<Jedi> jedi= repository.findById(id);
-		
-		if(jedi.isPresent()) return ResponseEntity.ok(jedi.get());
-		return ResponseEntity.notFound().build();
-//		throw new JediNotFoundException();
+		Jedi jedi = service.findById(id);
+		return ResponseEntity.ok(jedi);
 	}
-	
+
 	@PostMapping("/jedi")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Jedi createJedi(@Valid Jedi jedi) {
-		return repository.save(jedi);
+		return service.save(jedi);
 	}
-	
+
 	@PutMapping("/jedi/{id}")
-	
+
 	public ResponseEntity<Jedi> updateJedi(@PathVariable int id, @Valid Jedi dto) {
-		Optional<Jedi> jediEntity = repository.findById(id);
-		Jedi jedi;
-		
-		if(jediEntity.isPresent()) jedi = jediEntity.get();
-		else return ResponseEntity.notFound().build();
-		
-		jedi.setName(dto.getName());
-		jedi.setLastName(dto.getLastName());
-		
-		return ResponseEntity.ok(repository.save(jedi));		
+		Jedi jedi = service.update(id, dto);
+		return ResponseEntity.ok(jedi);
 	}
-	
+
 	@DeleteMapping("/jedi/{id}")
-	public ResponseEntity deleteJedi(@PathVariable int id) {
-		Optional<Jedi> jediEntity = repository.findById(id);
-		
-		if(jediEntity.isEmpty()) return ResponseEntity.notFound().build();
-		
-		repository.deleteById(id);
-		return ResponseEntity.noContent().build();
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void deleteJedi(@PathVariable int id) {		
+		service.deleteById(id);
 	}
 }
