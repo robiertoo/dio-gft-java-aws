@@ -41,7 +41,7 @@ public class JediService {
 		return repository.save(jedi);
 	}
 
-	public ResponseEntity deleteById(int id) {
+	public void deleteById(int id) {
 		Jedi jediEntity = this.findById(id);
 		repository.deleteById(id);
 	}
