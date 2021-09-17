@@ -1,43 +1,57 @@
 package br.com.robierto.springwebmvcintermediariorestjax.service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import br.com.robierto.springwebmvcintermediariorestjax.controller.request.SoldadoEditRequest;
+import br.com.robierto.springwebmvcintermediariorestjax.controller.response.SoldadoResponse;
 import br.com.robierto.springwebmvcintermediariorestjax.dto.Soldado;
+import br.com.robierto.springwebmvcintermediariorestjax.entity.SoldadoEntity;
+import br.com.robierto.springwebmvcintermediariorestjax.repository.SoldadoRepository;
 
 @Service
 public class SoldadoService {
 	
-	public Soldado buscarSoldado(String cpf) {
-		Soldado soldado = new Soldado(cpf, "Legolas", "Elfo", "Arco e Flecha");
-		return soldado;
+	private SoldadoRepository repository;
+	private ObjectMapper objectMapper;
+	
+	public SoldadoService(SoldadoRepository repository, ObjectMapper objectMapper) {
+		this.repository = repository;
+		this.objectMapper = objectMapper;
 	}
 	
-	public Soldado criarSoldado(Soldado soldado) {
-		return soldado;
+	public SoldadoResponse buscarSoldado(int id) {
+		SoldadoEntity soldado = repository.findById(id).orElseThrow();
+		SoldadoResponse soldadoResponse = objectMapper.convertValue(soldado, SoldadoResponse.class);
+		return soldadoResponse;
+	}
+	
+	public void criarSoldado(Soldado soldado) {
+		SoldadoEntity entity = objectMapper.convertValue(soldado, SoldadoEntity.class);
+		repository.save(entity);
 	}
 
-	public void alterarSoldado(String cpf, SoldadoEditRequest seq) {
-		
+	public void alterarSoldado(int id, SoldadoEditRequest seq) {
+		SoldadoEntity entity = objectMapper.convertValue(seq, SoldadoEntity.class);
+		entity.setId(id);
+		repository.save(entity);
 	}
 
-	public void deletarSoldado(String cpf) {
-		
+	public void deletarSoldado(int id) {
+		SoldadoEntity entity = repository.findById(id).orElseThrow();
+		repository.delete(entity);
 	}
 
 	public List<Soldado> buscarSoldados() {
-		List<Soldado> soldados = new ArrayList<>();
-		
-		Soldado soldado1 = new Soldado("12345789", "Gimli", "Anão", "Machado");
-		Soldado soldado2 = new Soldado("987654321", "Aragorn", "Humano", "Espada");
-		
-		
-		soldados = Arrays.asList(soldado1, soldado2);
-		
-		return soldados;
+		Iterable<SoldadoEntity> all = repository.findAll();
+		List<Soldado> soldadoStream =  StreamSupport.stream(all.spliterator(), false)
+				.map(it -> objectMapper.convertValue(it, Soldado.class))
+				.collect(Collectors.toList());
+		return soldadoStream;
 	}
 }
