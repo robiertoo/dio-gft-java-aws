@@ -18,8 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.robierto.springwebmvcintermediariorestjax.controller.request.SoldadoEditRequest;
+import br.com.robierto.springwebmvcintermediariorestjax.controller.response.SoldadoListResponse;
 import br.com.robierto.springwebmvcintermediariorestjax.controller.response.SoldadoResponse;
 import br.com.robierto.springwebmvcintermediariorestjax.dto.Soldado;
+import br.com.robierto.springwebmvcintermediariorestjax.entity.SoldadoEntity;
 import br.com.robierto.springwebmvcintermediariorestjax.service.SoldadoService;
 
 @RestController
@@ -60,10 +62,8 @@ public class SoldadoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<SoldadoResponse>> buscarSoldados() {
-        List<SoldadoResponse> soldados = soldadoService.buscarSoldados().stream()
-                .map(it -> objectMapper.convertValue(it, SoldadoResponse.class))
-                .collect(Collectors.toList());
+    public ResponseEntity<List<SoldadoListResponse>> buscarSoldados() {
+        List<SoldadoListResponse> soldados = soldadoService.buscarSoldados();
         return ResponseEntity.status(HttpStatus.OK).body(soldados);
     }
 }

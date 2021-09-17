@@ -1,6 +1,7 @@
 package br.com.robierto.springwebmvcintermediariorestjax.resource;
 
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.hateoas.Link;
+import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -8,7 +9,10 @@ import br.com.robierto.springwebmvcintermediariorestjax.controller.SoldadoContro
 import br.com.robierto.springwebmvcintermediariorestjax.controller.response.SoldadoListResponse;
 import br.com.robierto.springwebmvcintermediariorestjax.entity.SoldadoEntity;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+@Component
 public class ResourceSoldado {
 	private ObjectMapper objectMapper;
 
@@ -22,11 +26,10 @@ public class ResourceSoldado {
 	}
 
 	public SoldadoListResponse criarLink(SoldadoEntity entity) {
-		SoldadoListResponse soldadoListResponse = objectMapper.convertValue(entity, SoldadoListResponse.class);
-		WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(SoldadoController.class).buscarSoldado(entity.getId())).withSelfRel();
-//		WebMvcLinkBuilder linkTo = linkTo(methodOn(SoldadoController.class).buscarSoldado(SoldadoEntity.getId())).withSelfRel();
-		
-//		ControllerLinkRelationProvider linkTo = linkTo.(method)
-//		soldadoListResponse.add(null);
+		SoldadoListResponse soldadoListResponse = objectMapper
+				.convertValue(entity, SoldadoListResponse.class);
+		Link link = linkTo(methodOn(SoldadoController.class).buscarSoldado(entity.getId())).withSelfRel();
+		soldadoListResponse.add(link);
+		return soldadoListResponse;
 	}
 }

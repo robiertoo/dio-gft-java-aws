@@ -8,7 +8,7 @@ import javax.persistence.Id;
 @Entity
 public class SoldadoEntity {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	private String nome;
 	private String cpf;
