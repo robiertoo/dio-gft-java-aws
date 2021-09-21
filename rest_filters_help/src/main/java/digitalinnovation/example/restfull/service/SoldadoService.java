@@ -1,20 +1,18 @@
-package br.com.robierto.springwebmvcintermediariorestjax.service;
+package digitalinnovation.example.restfull.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import digitalinnovation.example.restfull.controller.request.SoldadoEditRequest;
+import digitalinnovation.example.restfull.controller.response.SoldadoListResponse;
+import digitalinnovation.example.restfull.controller.response.SoldadoResponse;
+import digitalinnovation.example.restfull.dto.Soldado;
+import digitalinnovation.example.restfull.entity.SoldadoEntity;
+import digitalinnovation.example.restfull.repostory.SoldadoRepository;
+import digitalinnovation.example.restfull.rosource.ResourceSoldado;
+import org.springframework.hateoas.Resources;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Service;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import br.com.robierto.springwebmvcintermediariorestjax.controller.request.SoldadoEditRequest;
-import br.com.robierto.springwebmvcintermediariorestjax.controller.response.SoldadoListResponse;
-import br.com.robierto.springwebmvcintermediariorestjax.controller.response.SoldadoResponse;
-import br.com.robierto.springwebmvcintermediariorestjax.dto.Soldado;
-import br.com.robierto.springwebmvcintermediariorestjax.entity.SoldadoEntity;
-import br.com.robierto.springwebmvcintermediariorestjax.repository.SoldadoRepository;
-import br.com.robierto.springwebmvcintermediariorestjax.resource.ResourceSoldado;
 
 @Service
 public class SoldadoService {
@@ -51,11 +49,11 @@ public class SoldadoService {
         soldadoRepository.delete(soldado);
     }
 
-    public List<SoldadoListResponse> buscarSoldados(){
+    public Resources<SoldadoListResponse> buscarSoldados(){
         List<SoldadoEntity> all = soldadoRepository.findAll();
         List<SoldadoListResponse> soldadoStream = all.stream()
                 .map(it -> resourceSoldado.criarLink(it))
                 .collect(Collectors.toList());
-        return soldadoStream;
+        return new Resources<>(soldadoStream);
     }
 }

@@ -1,7 +1,12 @@
-package br.com.robierto.springwebmvcintermediariorestjax.controller;
+package digitalinnovation.example.restfull.controller;
 
-import java.util.List;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import digitalinnovation.example.restfull.controller.request.SoldadoEditRequest;
+import digitalinnovation.example.restfull.controller.response.SoldadoListResponse;
+import digitalinnovation.example.restfull.controller.response.SoldadoResponse;
+import digitalinnovation.example.restfull.dto.Soldado;
+import digitalinnovation.example.restfull.service.SoldadoService;
+import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,14 +17,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import br.com.robierto.springwebmvcintermediariorestjax.controller.request.SoldadoEditRequest;
-import br.com.robierto.springwebmvcintermediariorestjax.controller.response.SoldadoListResponse;
-import br.com.robierto.springwebmvcintermediariorestjax.controller.response.SoldadoResponse;
-import br.com.robierto.springwebmvcintermediariorestjax.dto.Soldado;
-import br.com.robierto.springwebmvcintermediariorestjax.service.SoldadoService;
 
 @RestController
 @RequestMapping("/v1/soldado")
@@ -66,8 +63,8 @@ public class SoldadoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<SoldadoListResponse>> buscarSoldados() {
-        List<SoldadoListResponse> soldadoListResponses = soldadoService.buscarSoldados();
+    public ResponseEntity<Resources<SoldadoListResponse>> buscarSoldados() {
+        Resources<SoldadoListResponse> soldadoListResponses = soldadoService.buscarSoldados();
         return ResponseEntity.status(HttpStatus.OK).body(soldadoListResponses);
     }
 }

@@ -2,16 +2,20 @@ package br.com.robierto.springwebmvcintermediariorestjax.controller.response;
 
 import org.springframework.hateoas.RepresentationModel;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class SoldadoListResponse extends RepresentationModel {
-	private int id;
+	private Long id;
 	private String nome;
 	private String raca;
 
-	public int getResourceId() {
+	@JsonProperty("id")
+	public Long getResourceId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	@JsonProperty("id")
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -30,5 +34,4 @@ public class SoldadoListResponse extends RepresentationModel {
 	public void setRaca(String raca) {
 		this.raca = raca;
 	}
-
 }

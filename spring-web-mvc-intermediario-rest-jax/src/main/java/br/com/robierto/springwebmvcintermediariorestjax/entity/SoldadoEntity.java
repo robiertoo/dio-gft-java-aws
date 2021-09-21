@@ -9,7 +9,7 @@ import javax.persistence.Id;
 public class SoldadoEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int id;
+	private Long id;
 	private String nome;
 	private String cpf;
 	private String raca;
@@ -20,9 +20,8 @@ public class SoldadoEntity {
 		// TODO Auto-generated constructor stub
 	}
 
-	public SoldadoEntity(int id, String nome, String cpf, String raca, String arma, String status) {
+	public SoldadoEntity(String nome, String cpf, String raca, String arma, String status) {
 		super();
-		this.id = id;
 		this.nome = nome;
 		this.cpf = cpf;
 		this.raca = raca;
@@ -30,11 +29,11 @@ public class SoldadoEntity {
 		this.status = status;
 	}
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
