@@ -37,7 +37,7 @@ public class RedisConfig {
     @Bean
     public RedisTemplate<String, Object> redisTemplate() {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
-        template.setConnectionFactory(redisConnectionFactory("localhost", 6379));
+        template.setConnectionFactory(redisConnectionFactory("172.17.0.2", 6379));
         return template;
     }
 }
